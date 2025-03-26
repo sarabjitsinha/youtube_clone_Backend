@@ -48,4 +48,4 @@ const clFiles= new mongoose.Schema({
     
 })
 
-export const channelFiles= mongoose.model('channelfile',clFiles);
+export const channelfiles= mongoose.model('channelfile',clFiles);

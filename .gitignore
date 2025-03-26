@@ -18,6 +18,7 @@ Thumbs.db
 /.idea/
 /.vscode/
 /uploads/
+
 # Ignore logs and temp files
 *.log
 *.tmp

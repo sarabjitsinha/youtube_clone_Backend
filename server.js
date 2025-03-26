@@ -3,7 +3,14 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { Adduser,validLogin,validateChannel,createChannel,fileUpload } from "./Controllers/controllers.js";
+import { Adduser,
+  validLogin,
+  validateChannel,
+  createChannel,
+  fileUpload,
+  userVideo 
+}
+   from "./Controllers/controllers.js";
 import * as dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import upload from "./upload.js";
@@ -48,3 +55,5 @@ app.post('/signin',validLogin)
 app.get('/channel',validateChannel)
 
 app.post('/addchannel',createChannel)
+
+app.get('/channelvideo',userVideo)

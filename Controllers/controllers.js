@@ -1,5 +1,4 @@
-
-import {youuser,channel,channelFiles} from "../Model/model.js";
+import {youuser,channel,channelfiles} from "../Model/model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import * as dotenv from "dotenv"
@@ -93,7 +92,7 @@ export async function createChannel(req,res){
 export function fileUpload(req,res){
     const {title,category}=req.body;
     const filepath=req.file ? req.file.path:null;
-    const newvid=new channelFiles({
+    const newvid=new channelfiles({
       title:title,
       category:category,
       vid_file:filepath
@@ -101,4 +100,17 @@ export function fileUpload(req,res){
    
     newvid.save().then(()=>res.send("upload success in axios")).catch(()=>res.send("upload failed"))
     
+}
+
+
+export async function userVideo(req,res){
+        const uservideos=await channelfiles.find()
+        const videosOfuser=uservideos.map((video)=>video.vid_file)
+
+        console.log(videosOfuser)
+        if(!uservideos){
+            res.status(404).json({message:"No videos to play"})
+            return
+        }
+        res.send(videosOfuser)
 }
