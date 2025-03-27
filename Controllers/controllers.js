@@ -6,9 +6,13 @@ dotenv.config()
 
 const SECRET_KEY=process.env.SECRET_KEY
 
-export function Adduser(req,res){
+export async function Adduser(req,res){
     const {name,email,password}=req.body;
-    console.log(req.body)
+    const duplicateUser= await youuser.findOne({email:email})
+    if(duplicateUser){
+        res.send("User exists");
+        return
+    }
     async function useradding() {
         try{
         const newuser= new youuser({name:name,email:email,password:password});
@@ -27,9 +31,9 @@ export function Adduser(req,res){
 
 export async function validLogin(req,res){
    
-    const {userName,password}=req.body;
+    const {userEmail,password}=req.body;
 
-    const userfind=await youuser.findOne({name:userName});
+    const userfind=await youuser.findOne({email:userEmail.toUpperCase()});
             if(!userfind)
             {
                 res.send(null)
@@ -45,7 +49,7 @@ export async function validLogin(req,res){
                 if(result)
                 {
                     const token=jwt.sign({user:userfind.name},SECRET_KEY,{expiresIn:'10h'})
-                    res.cookie("Authorization",token,{expires:new Date(Date.now()+3600000),secure:true,sameSite:"None"})
+                    res.cookie("Authorization",token,{maxAge:9000000,secure:true,sameSite:"None"})
                     .json({
                         token,
                         message:"success"
@@ -58,16 +62,20 @@ export async function validLogin(req,res){
  
 
 
-export function validateChannel(req,res){
-    const token=req.cookies.Authorization
+export async function validateChannel(req,res){
+    const userName=req.headers["x-username"]
+    const token=req.cookies.Authorization 
     if(token){
        const accessToken=jwt.verify(token,SECRET_KEY)
+      const channelCheck= await channel.find({username:userName})
+      
        if(!accessToken){
+       
         res.send("Invalid signature")
         return
        }
-       if(accessToken) {    
-      res.send("token received")
+       if(accessToken) {   
+            res.json({message:"token received"})
       return
        }
     }
@@ -107,14 +115,14 @@ export async function createChannel(req,res){
 
 export async function userVideo(req,res){
         const username=req.headers["x-username"]
-        console.log(username)
+    
         const uservideos=await channelfiles.find({username:username})
-        const videosOfuser=uservideos.map((video)=>video.vid_file)
+        const videosOfuser=uservideos.map((video)=>({video_path:video.vid_file,video_title:video.title}))
 
-        console.log(videosOfuser)
         if(!uservideos){
             res.status(404).json({message:"No videos to play"})
             return
         }
+        
         res.send(videosOfuser)
 }
