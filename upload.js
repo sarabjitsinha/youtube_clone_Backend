@@ -3,11 +3,16 @@ import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import express from "express"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const app=new express()
+app.use(express.static('public'))
 
-const uploadDir = path.join(__dirname, 'uploads');
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// const uploadDir = path.join(__dirname, 'uploads');
+const uploadDir='public';
 
 const ensureDirExists = (dir) => {
     if (!fs.existsSync(dir)) {
@@ -17,7 +22,7 @@ const ensureDirExists = (dir) => {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const username=req.body.username || "unknown-user"
+         const username=req.headers['x-username' || 'unknown-user'];
          const destPath = path.join(uploadDir, username); // Subfolder for images
         ensureDirExists(destPath); // Ensure it exists before saving files
         cb(null, destPath);

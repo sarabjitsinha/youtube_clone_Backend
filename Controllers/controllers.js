@@ -44,8 +44,8 @@ export async function validLogin(req,res){
                 }
                 if(result)
                 {
-                    const token=jwt.sign({user:userfind.name},SECRET_KEY,{expiresIn:'10m'})
-                    res.cookie("Authorization",token,{maxAge:100000,secure:true,sameSite:"None"})
+                    const token=jwt.sign({user:userfind.name},SECRET_KEY,{expiresIn:'10h'})
+                    res.cookie("Authorization",token,{expires:new Date(Date.now()+3600000),secure:true,sameSite:"None"})
                     .json({
                         token,
                         message:"success"
@@ -79,7 +79,7 @@ export function validateChannel(req,res){
 
 export async function createChannel(req,res){
         const {username,channelname}=req.body
-        const newChannel=await new channel({
+        const newChannel= new channel({
             username,
             channelname
         })
@@ -89,22 +89,26 @@ export async function createChannel(req,res){
 }
 
 
-export function fileUpload(req,res){
-    const {title,category}=req.body;
-    const filepath=req.file ? req.file.path:null;
-    const newvid=new channelfiles({
-      title:title,
-      category:category,
-      vid_file:filepath
-    });
-   
-    newvid.save().then(()=>res.send("upload success in axios")).catch(()=>res.send("upload failed"))
+// export function fileUpload(req,res){
+
+//     const {title,category,userName}=req.body;
+//     const filepath=req.file ? req.file.name:null;
     
-}
+//     const newvid=new channelfiles({
+//       title:title,
+//       category:category,
+//       vid_file:filepath
+//     });
+   
+//     newvid.save().then(()=>res.send("upload success in axios")).catch(()=>res.send("upload failed"))
+    
+// }
 
 
 export async function userVideo(req,res){
-        const uservideos=await channelfiles.find()
+        const username=req.headers["x-username"]
+        console.log(username)
+        const uservideos=await channelfiles.find({username:username})
         const videosOfuser=uservideos.map((video)=>video.vid_file)
 
         console.log(videosOfuser)

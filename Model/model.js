@@ -37,6 +37,7 @@ const channelSchema=new mongoose.Schema({
 export const channel= mongoose.model("channel",channelSchema);
 
 const clFiles= new mongoose.Schema({
+    username:String,
     title:{
         type:String,
         required:true},
