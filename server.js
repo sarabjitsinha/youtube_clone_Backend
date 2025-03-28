@@ -7,7 +7,6 @@ import { Adduser,
   validLogin,
   validateChannel,
   createChannel,
-  // fileUpload,
   userVideo,
   userChannel 
 }
@@ -42,32 +41,12 @@ app.listen(PORT,()=>{
 
 mongoose.connect(`mongodb+srv://sinhasarabjit:${DB_PASSWORD}@cluster0.mnfd3.mongodb.net/`)
 
-// mongoose.connect("mongodb://127.0.0.1:27017/")
 
 const db=mongoose.connection;
 
 db.on('open',()=>{
     console.log("Database Connected");
 })
-
-app.post('/upload',upload.single('file'),(req,res)=>{
-
-    const {title,category}=req.body;
-    // const username=window.localStorage.getItem("User")
-    const username=req.headers['x-username' || 'unknown-user']
-    // const filepath=req.file ? req.file.name:null;
-    const fileUrl=`${req.protocol}://${req.get('host')}/uploads/${username}/${req.file.filename}`
-    const newvid=new channelfiles({
-      username:username,
-      title:title,
-      category:category,
-      vid_file:fileUrl
-    });
-   
-    newvid.save().then(()=>res.send("upload success in axios")).catch(()=>res.send("upload failed"))
-    
-})
-
 
 app.post('/register',Adduser);
 
@@ -80,3 +59,19 @@ app.post('/addchannel',createChannel)
 app.get('/channelvideo',userVideo)
 
 app.get('/channelname',userChannel)
+
+app.post('/upload',upload.single('file'),(req,res)=>{
+
+  const {title,category}=req.body;
+  const username=req.headers['x-username' || 'unknown-user']
+  const fileUrl=`${req.protocol}://${req.get('host')}/uploads/${username}/${req.file.filename}`
+  const newvid=new channelfiles({
+    username:username,
+    title:title,
+    category:category,
+    vid_file:fileUrl
+  });
+ 
+  newvid.save().then(()=>res.send("upload success")).catch(()=>res.send("upload failed. Please select a Category/Title"))
+  
+})

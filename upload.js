@@ -12,6 +12,7 @@ app.use(express.static('public'))
 // const __dirname = path.dirname(__filename);
 
 // const uploadDir = path.join(__dirname, 'uploads');
+
 const uploadDir='public';
 
 const ensureDirExists = (dir) => {
@@ -23,7 +24,7 @@ const ensureDirExists = (dir) => {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
          const username=req.headers['x-username' || 'unknown-user'];
-         const destPath = path.join(uploadDir, username); // Subfolder for images
+         const destPath = path.join(uploadDir, username); 
         ensureDirExists(destPath); // Ensure it exists before saving files
         cb(null, destPath);
     },
