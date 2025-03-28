@@ -8,7 +8,8 @@ import { Adduser,
   validateChannel,
   createChannel,
   // fileUpload,
-  userVideo 
+  userVideo,
+  userChannel 
 }
    from "./Controllers/controllers.js";
 import * as dotenv from "dotenv"
@@ -77,3 +78,5 @@ app.get('/channel',validateChannel)
 app.post('/addchannel',createChannel)
 
 app.get('/channelvideo',userVideo)
+
+app.get('/channelname',userChannel)

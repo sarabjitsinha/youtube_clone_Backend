@@ -42,7 +42,7 @@ export async function validLogin(req,res){
             bcrypt.compare(password,userfind.password,(err,result)=>{
                 if(!result)
                     {
-                        console.log(err)
+                
                     res.send("incorrect password")
                     return;
                 }
@@ -63,11 +63,11 @@ export async function validLogin(req,res){
 
 
 export async function validateChannel(req,res){
-    const userName=req.headers["x-username"]
+    
     const token=req.cookies.Authorization 
     if(token){
        const accessToken=jwt.verify(token,SECRET_KEY)
-      const channelCheck= await channel.find({username:userName})
+      
       
        if(!accessToken){
        
@@ -75,7 +75,7 @@ export async function validateChannel(req,res){
         return
        }
        if(accessToken) {   
-            res.json({message:"token received"})
+            res.send("token received")
       return
        }
     }
@@ -88,7 +88,7 @@ export async function validateChannel(req,res){
 export async function createChannel(req,res){
         const {username,channelname}=req.body
         const newChannel= new channel({
-            username,
+            username:username,
             channelname
         })
 
@@ -125,4 +125,14 @@ export async function userVideo(req,res){
         }
         
         res.send(videosOfuser)
+}
+
+
+export async function userChannel(req,res) {
+    const userName=req.headers["x-username"]
+    const channelCheck= await channel.findOne({username:userName})   
+
+ if(channelCheck){
+ res.send(channelCheck.channelname)
+ }
 }
