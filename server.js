@@ -8,7 +8,8 @@ import { Adduser,
   validateChannel,
   createChannel,
   userVideo,
-  userChannel 
+  userChannel,
+  deleteVideo 
 }
    from "./Controllers/controllers.js";
 import * as dotenv from "dotenv"
@@ -75,3 +76,5 @@ app.post('/upload',upload.single('file'),(req,res)=>{
   newvid.save().then(()=>res.send("upload success")).catch(()=>res.send("upload failed. Please select a Category/Title"))
   
 })
+
+app.delete("/delete",deleteVideo)

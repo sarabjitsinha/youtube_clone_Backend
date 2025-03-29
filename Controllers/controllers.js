@@ -118,3 +118,18 @@ export async function userChannel (req, res) {
     res.send(channelCheck.channelname)
   }
 }
+
+export async function deleteVideo(req,res) {
+  const target=req.headers["x-url"]
+  const user=req.headers["x-username"]
+  const deleteVid= await channelfiles.deleteOne({$and:[{vid_file:target},{username:user}]})
+  console.log(deleteVid)
+  if(deleteVid.deletedCount==1){
+    res.send("success");
+    return
+  }
+  else{
+    res.send("error")
+  }
+  
+}
