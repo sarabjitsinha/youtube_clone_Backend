@@ -28,7 +28,7 @@ app.use(express.json())
 app.use('/uploads',express.static('public'));
 
 app.use(cors({
-  origin:'https://youtube-clone-frontend-alpha.vercel.app',
+  origin:'https://youtube-clone-frontend-alpha.vercel.app/',
   credentials:true
 }));
 
