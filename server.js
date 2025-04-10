@@ -49,7 +49,7 @@ db.on('open',()=>{
     console.log("Database Connected");
 })
 
-app.post('/register',Adduser);
+app.post('/api/register',Adduser);
 
 app.post('/signin',validLogin)
 
