@@ -28,7 +28,7 @@ app.use(express.json())
 app.use('/uploads',express.static('public'));
 
 app.use(cors({
-  origin:'https://youtube-clone-frontend-alpha.vercel.app/',
+  origin:'https://youtube-clone-frontend-alpha.vercel.app',
   credentials:true
 }));
 
@@ -49,7 +49,7 @@ db.on('open',()=>{
     console.log("Database Connected");
 })
 
-app.post('/api/register',Adduser);
+app.post('/register',Adduser);
 
 app.post('/signin',validLogin)
 
