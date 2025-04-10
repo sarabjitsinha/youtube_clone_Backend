@@ -28,7 +28,7 @@ app.use(express.json())
 app.use('/uploads',express.static('public'));
 
 app.use(cors({
-  origin:'http://localhost:5173',
+  origin:'https://youtube-clone-frontend-alpha.vercel.app',
   credentials:true
 }));
 
